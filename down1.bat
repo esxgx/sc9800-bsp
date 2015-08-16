@@ -1,0 +1,1 @@
+efel2p < down1.txt

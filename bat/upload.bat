@@ -1,0 +1,1 @@
+efel2p < ins.txt

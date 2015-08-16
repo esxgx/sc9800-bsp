@@ -1,0 +1,72 @@
+1. SAMSUNG(每个block最后一页的OOB区域第一个字节为非“FFh”):
+   "The initial invalid block(s) status is defined by the 1st byte in the spare area.
+    Samsung makes sure that the last page of every initial invalidblock has non-FFh
+    data at the column address of 2,048(4096)."
+
+2. HYNIX(每个block最后一页或倒数第二页的OOB区域第一个字节为非“FFh”):
+   Any block where the 1st Byte in the spare area of the Last and (Last-2)th page
+   (if the last page is Bad) does not contain FFh is a Bad Block.(H27UAG8T2A)
+
+   (每个block第一页或第二页的OOB区域第一个字节为非“FFh”，以前的一些型号)
+   Any block where the 1st Byte in the spare area of the 1st or 2nd th page (if the
+   1st page is Bad) does not contain FFh is a Bad Block.
+   The Bad Block Information must be read before any erase is attempted as the Bad Block
+   Information may be erased. For the system to be able to recog-nize the Bad Blocks
+   based on the original information it is recommended to create a Bad Block table following
+   the flow-chart shown in Figure 30. The 1st block, which is placed on 00h block address
+   is guaranteed to be a valid block.(ONLY A LITTLE!!!)
+
+3. MICRON(每个block第一页的OOB区域第一个字节为“00h”):
+   NAND Flash devices are shipped from the factory erased. The factory identifies invalid
+   blocks before shipping by attempting to program the bad-block mark into every location
+   in the first page of each invalid block. It may not be possible to program every location
+   with the bad-block mark. However, the first spare area location in each bad block is
+   guaranteed to contain the bad-block mark. This method is compliant with ONFI Factory
+   Defect Mapping requirements. See Table 15 for the first spare area location and the bad-
+   block mark.
+
+   System software should check the first spare area location on the first page of each block
+   prior to performing any PROGRAM or ERASE operations on the NAND Flash device. A
+   bad block table can then be created, enabling system software to map around these
+   areas. Factory testing is performed under worst-case conditions. Because invalid blocks
+   could be marginal, it may not be possible to recover this information if the block is
+   erased.
+
+   Over time, some memory locations may fail to program or erase properly. In order to
+   ensure that data is stored properly over the life of the NAND Flash device, the following
+   precautions are required:
+   ? Always check status after a PROGRAM or ERASE operation.
+   ? Under typical conditions, use the minimum required ECC shown in Table 15.
+   ? Use bad-block management and wear-leveling algorithms.
+
+4. INTEL(每个block第一页的OOB区域“00h”，描述的比较模糊!!):
+   NAND Flash devices are shipped from the factory erased. The factory identifies invalid
+   blocks before shipping by programming 00h into one or more bytes in the spare area,
+   bytes 4,096 to 4,313, of the first page of each bad block.
+
+   System software should check bytes 4,096 to 4,313 on the first page of each block for
+   a 00h value prior to performing any PROGRAM or ERASE operations on the NAND Flash
+   device. A bad-block table can then be created, allowing system software to map around
+   these areas. Factory testing is performed under worst-case conditions. Because blocks
+   marked “bad” may be marginal, it may not be possible to recover this information if the
+   block is erased.
+
+   Over time, some memory locations may fail to program or erase properly. In order to
+   ensure that data is stored properly over the life of the NAND Flash device, the following
+   precautions are required:
+
+5. Numonyx_恒忆(每个block第一页的OOB区域第1个和第6个字节或者开始的4个字节为非“00h”):
+   The devices are supplied with all the locations inside valid blocks erased (FFh). The bad
+   block information is written prior to shipping. Any block, where the 1st and 6th bytes or the
+   1st word in the spare area of the 1st page, does not contain FFh, is a bad block.
+   The bad block information must be read before any erase is attempted as the bad block
+   information may be erased. For the system to be able to recognize the bad blocks based on
+   the original information.
+
+6. ST(每个block第一页的OOB区域第一个字节为非“FFh”):
+    Any block, where the 1st Byte in the spare area of the last page, does not contain FFh,
+    is a Bad Block.
+
+7. TOSHIBA(very old! ):
+   verify the column address of 517bytes(the 6th byte in spare area!) of the first page in
+   the block with FF (Hex). 
